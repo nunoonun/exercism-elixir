@@ -10,15 +10,11 @@ defmodule LucasNumbers do
   def generate(1), do: [2]
   def generate(2), do: [2, 1]
   def generate(count) do
-    3..count
-    |> Stream.scan(generate(2), &calculate/2)
-    |> Enum.to_list()
-    |> List.flatten()
-    |> Enum.uniq()
-    |> List.insert_at(0, 2)
+    Stream.unfold({2, 1}, &calculate/1)
+    |> Enum.take(count)
   end
 
-  defp calculate(_, [h | [t]]) do
-    [t, h + t]
+  defp calculate({last, current}) do
+    {last, {current, last + current}}
   end
 end
