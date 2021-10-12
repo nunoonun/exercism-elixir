@@ -12,13 +12,13 @@ defmodule LucasNumbers do
   def generate(count) do
     3..count
     |> Stream.scan(generate(2), &calculate/2)
-    |> Enum.take(count - 2)
-    |> List.last()
+    |> Enum.to_list()
+    |> List.flatten()
+    |> Enum.uniq()
+    |> List.insert_at(0, 2)
   end
 
-  defp calculate(_, acc) do
-    {first, rem} = List.pop_at(acc, length(acc) - 1)
-    {second, _} = List.pop_at(rem, length(rem) - 1)
-    acc ++ [first + second]
+  defp calculate(_, [h | [t]]) do
+    [t, h + t]
   end
 end
